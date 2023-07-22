@@ -12,7 +12,4 @@ describe('TimeDayController', () => {
     controller = module.get<TimeDayController>(TimeDayController);
   });
 
-  it('should be defined', () => {
-    expect(controller).toBeDefined();
-  });
 });

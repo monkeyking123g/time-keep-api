@@ -3,7 +3,7 @@ import { AppModule } from './app.module';
 import * as fs from 'fs';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, { cors: true });
 
   if (!fs.existsSync('./uploads')) {
     fs.mkdirSync('./uploads');

@@ -7,12 +7,26 @@ import { User } from './user.model';
 export class UserService {
   constructor(@InjectModel(User.name) private readonly userModel: Model<User>) {}
 
-  async createUser(user: Partial<User>): Promise<User> {
+  async create(user: Partial<User>): Promise<User> {
     const createdUser = new this.userModel(user);
     return createdUser.save();
   }
 
-  async findAllUsers(): Promise<User[]> {
+  async findAll(): Promise<User[]> {
     return this.userModel.find().exec();
+  }
+  async findById(id: string): Promise<User> {
+    return this.userModel.findById(id).exec();
+  }
+
+  async update(id: string, user: Partial<User>): Promise<User> {
+    return this.userModel.findByIdAndUpdate(id, user, { new: true }).exec();
+  }
+
+  async delete(id: string): Promise<User> {
+    return this.userModel.findByIdAndDelete(id).exec();
+  }
+  async findOne(email: string): Promise<User| undefined> {
+    return this.userModel.findOne({ email }).exec();
   }
 }

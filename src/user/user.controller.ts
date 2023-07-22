@@ -6,28 +6,28 @@ import { User } from './user.model';
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  @Post()
-  async createUser(@Body() userData: Partial<User>): Promise<User> {
-    return this.userService.createUser(userData);
-  }
-
   @Get()
-  async getAllUsers(): Promise<User[]> {
-    return this.userService.findAllUsers();
+  async findAll() {
+    return this.userService.findAll();
   }
 
-//   @Get(':id')
-//   async getUserById(@Param('id') id: string): Promise<User> {
-//     return this.userService.findUserById(id);
-//   }
+  @Get(':id')
+  async findById(@Param('id') id: string) {
+    return this.userService.findById(id);
+  }
 
-//   @Put(':id')
-//   async updateUser(@Param('id') id: string, @Body() userData: Partial<User>): Promise<User> {
-//     return this.userService.updateUser(id, userData);
-//   }
+  @Post()
+  async create(@Body() user: Partial<User>) {
+    return this.userService.create(user);
+  }
 
-//   @Delete(':id')
-//   async deleteUser(@Param('id') id: string): Promise<User> {
-//     return this.userService.deleteUser(id);
-//   }
+  @Put(':id')
+  async update(@Param('id') id: string, @Body() user: Partial<User>) {
+    return this.userService.update(id, user);
+  }
+
+  @Delete(':id')
+  async delete(@Param('id') id: string) {
+    return this.userService.delete(id);
+  }
 }
