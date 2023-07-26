@@ -1,9 +1,12 @@
+
 import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Types } from 'mongoose';
-import { User } from "../user/user.model"
 
 @Schema()
 export class TimeDay extends Document {
+  @Prop({ required: false })
+  owner_id: string;
+
   @Prop({ required: true })
   company: string;
 
@@ -19,8 +22,10 @@ export class TimeDay extends Document {
   @Prop({ required: true, default: Date.now })
   dateCreated: Date;
 
-  @Prop({ type: Types.ObjectId, ref: User.name })
-  owner: User;
+  @Prop({ type: Types.ObjectId, ref: 'User', required: true }) 
+  owner: Types.ObjectId;
+
+
 }
 
 export const TimeDayModel = SchemaFactory.createForClass(TimeDay);

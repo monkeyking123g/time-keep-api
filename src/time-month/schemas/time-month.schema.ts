@@ -1,6 +1,5 @@
 import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Types } from 'mongoose';
-import { User } from '../user/user.model';
 
 @Schema()
 export class TimeMonth extends Document {
@@ -13,8 +12,9 @@ export class TimeMonth extends Document {
   @Prop({ default: Date.now })
   dateCreated: Date;
 
-  @Prop({ type: Types.ObjectId, ref: User.name })
-  owner: User;
+  @Prop({ type: Types.ObjectId, ref: 'User', required: true }) 
+  owner: Types.ObjectId;
+
 }
 
 export const TimeMonthModel = SchemaFactory.createForClass(TimeMonth);

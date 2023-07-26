@@ -7,10 +7,17 @@ import { UserModule } from "./user/user.module";
 import { TimeMonthModule } from './time-month/time-month.module';
 import { UploadModule } from './upload/upload.module';
 import { AuthModule } from './auth/auth.module';
-
+import { User, UserModel } from './user/user.model';
+import { TimeDay, TimeDayModel } from "./time-day/schemas/time-day.schema"
+import { TimeMonth, TimeMonthModel } from './time-month/schemas/time-month.schema';
 @Module({
   imports: [
     MongooseModule.forRoot('mongodb://localhost/nestjs_app'),
+    MongooseModule.forFeature([
+      { name: User.name, schema: UserModel},
+      { name:  TimeDay.name, schema: TimeDayModel},
+      { name:  TimeMonth.name, schema: TimeMonthModel},
+    ]),
     TimeDayModule,
     UserModule,
     TimeMonthModule,

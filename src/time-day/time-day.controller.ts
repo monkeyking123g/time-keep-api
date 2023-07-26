@@ -1,25 +1,18 @@
-import { Controller, Get, Post, Body, Param, Put, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Put, Delete, BadRequestException } from '@nestjs/common';
 import { TimeDayService } from "./time-day.service"
-import { TimeDay  } from './time-day.model';
-
-@Controller('time-day')
+import { TimeDay  } from './schemas/time-day.schema';
+@Controller('day')
 export class TimeDayController {
     constructor(private readonly timeDayService: TimeDayService) {}
 
-    @Get('user/:owner_id')
-    async getUserTimeDay(@Param('owner_id') owner_id: string) {
-        return  this.timeDayService.getUserTimeDay(owner_id);     
+    @Get('user/:ownerId')
+    async findAllByAuthor(@Param('ownerId') ownerId: string): Promise<TimeDay[]> {
+      return this.timeDayService.findAllByAuthor(ownerId);
     }
     @Get()
     async findAll() {
         return this.timeDayService.findAll();
     }
-
-    @Get(':id')
-    async findById(@Param('id') id: string) {
-        return this.timeDayService.findById(id);
-    }
-
     @Post()
     async create(@Body() user: Partial<TimeDay>) {
         return this.timeDayService.create(user);

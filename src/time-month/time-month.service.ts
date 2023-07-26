@@ -1,7 +1,7 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, BadRequestException, InternalServerErrorException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { TimeMonth } from './time-month.model';
+import { TimeMonth } from './schemas/time-month.schema';
 
 @Injectable()
 export class TimeMonthService {
@@ -10,22 +10,27 @@ export class TimeMonthService {
     @InjectModel(TimeMonth.name) private timeMonthModel: Model<TimeMonth>,
   ) {}
 
-  async getTimeMonth(owner_id: string): Promise<any> {
-    return await this.timeMonthModel
-      .find({ owner: owner_id })
-      .populate('owner')
-      .exec();
-  }
   async create(user: Partial<TimeMonth>): Promise<TimeMonth> {
-    const createdTimeMonth = new this.timeMonthModel(TimeMonth);
-    return createdTimeMonth.save();
+    try {
+      if (!user.month || !user.owner || !user.total || !user.dateCreated ) {
+        throw new BadRequestException("Invalid User data. Missing required properties.");
+      }
+      const createdTimeDay = new this.timeMonthModel(user);
+      return await createdTimeDay.save();
+    } catch (error) {
+      if (error instanceof BadRequestException) {
+        throw error; 
+      } else {
+        throw new InternalServerErrorException("Failed to create TimeDay", error.message);
+      }
+    }
   }
 
   async findAll(): Promise<TimeMonth[]> {
     return this.timeMonthModel.find().exec();
   }
-  async findById(id: string): Promise<TimeMonth> {
-    return this.timeMonthModel.findById(id).exec();
+  async findAllByOwner(ownerId: string): Promise<TimeMonth[]> {
+    return this.timeMonthModel.find({ owner: ownerId }).exec();
   }
 
   async update(id: string, TimeMonth: Partial<TimeMonth>): Promise<TimeMonth> {
