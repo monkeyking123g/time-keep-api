@@ -1,0 +1,34 @@
+version: '3.8'
+services:
+  api:
+    container_name: "hrm_api_${NODE_ENV}"
+    image: "hrm_api_${NODE_ENV}"
+    environment:
+      - NODE_ENV:${NODE_ENV}
+    build:
+      context: ./app
+      target: "${NODE_ENV}"
+      dockerfile: Dockerfile
+    entrypoint: ["npm", "run", "start:${NODE_ENV}"]
+    env_file:
+      - .env
+    ports:
+      - 9229:9229
+    networks:
+      - nesjs-network
+    volumes:
+      - ./app:/usr/src/app
+      - /usr/src/app/node_modules
+    restart: unless-stopped
+  mongodb:
+    container_name: "mongo_${NODE_ENV}"
+    image: "mongo:6"  # Specify the MongoDB version 
+    ports:
+      - 27017:27017
+    networks:
+      - nesjs-network
+    volumes:
+      - ./mongodb-data:/data/db
+networks:
+  nesjs-network:
+  
