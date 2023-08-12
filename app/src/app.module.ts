@@ -10,9 +10,13 @@ import { AuthModule } from './auth/auth.module';
 import { User, UserModel } from './user/user.model';
 import { TimeDay, TimeDayModel } from "./time-day/schemas/time-day.schema"
 import { TimeMonth, TimeMonthModel } from './time-month/schemas/time-month.schema';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
+    ConfigModule.forRoot({
+      envFilePath: '.env',
+    }), 
     MongooseModule.forRoot(process.env.MONGODB_URL),
     MongooseModule.forFeature([
       { name: User.name, schema: UserModel},
@@ -23,7 +27,7 @@ import { TimeMonth, TimeMonthModel } from './time-month/schemas/time-month.schem
     UserModule,
     TimeMonthModule,
     UploadModule,
-    AuthModule  
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],
